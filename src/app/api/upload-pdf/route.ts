@@ -1,18 +1,13 @@
 import { NextResponse } from "next/server";
-import { createUniqueId, datasetTable, db } from "@/db"; // Your DB setup
-import { OpenAIEmbeddings } from "@langchain/openai";
+import { createUniqueId, vectorStore } from "@/db";
+import type { Document } from "@langchain/core/documents";
 import pdf2json from "pdf2json";
 
 export const dynamic = "force-dynamic";
 
-const embeddings = new OpenAIEmbeddings({
-    openAIApiKey: process.env.OPENAI_API_KEY,
-    model: "text-embedding-3-small",
-});
-
 export async function POST(req: Request) {
     const formData = await req.formData();
-    const file = formData.get("file") as Blob;
+    const file = formData.get("file") as File;
 
     if (!file) {
         return NextResponse.json(
@@ -42,22 +37,25 @@ export async function POST(req: Request) {
 
             pdfParser.on("pdfParser_dataReady", async (pdfData) => {
                 // Extract text content from pdfData
-                const text = pdfData.Pages.map((page) =>
-                    page.Texts.map((textItem) =>
-                        decodeURIComponent(textItem.R[0].T)
-                    ).join(" ")
-                ).join("\n"); // Joining page text with new line
-
-                // Generate embeddings for the extracted text
-                const pdfEmbedding = await embeddings.embedQuery(text);
+                const docs: Document[] = pdfData.Pages.map(
+                    (page, pageIndex) => {
+                        const pageText = page.Texts.map((textItem) =>
+                            decodeURIComponent(textItem.R[0].T)
+                        ).join(" ");
+                        return {
+                            pageContent: pageText,
+                            metadata: {
+                                page: pageIndex + 1,
+                                source: file.name,
+                            },
+                            id: createUniqueId(),
+                        };
+                    }
+                );
 
                 // Save content and embedding to the database
-                await db.insert(datasetTable).values({
-                    id: createUniqueId(),
-                    content: text,
-                    embedding: pdfEmbedding,
-                });
-                return resolve(NextResponse.json({ text }));
+                (await vectorStore).addDocuments(docs);
+                return resolve(NextResponse.json({ message: "success" }));
             });
 
             // Parse the PDF buffer
