@@ -21,7 +21,7 @@ const formatMessage = (message: VercelChatMessage) => {
 
 const TEMPLATE = `You are a helpful assistant named Riyadi, and must answer all questions.
 
-Answer the question based on the following context and chat history, if you don't know the answer, please answer anything you know by saying "**external resource**: \n \n" first, then continue with your answer:
+Answer the question based on the following context and chat history, if you dont't find the answer in the context, please answer anything you know by saying "**external resource**: " at the first line, otherwise dont say that, then continue with your answer:
 <context>
   {context}
 </context>
@@ -48,7 +48,7 @@ export async function POST(req: Request) {
 
         const model = new ChatOpenAI({
             apiKey: process.env.OPENAI_API_KEY!,
-            model: "gpt-3.5-turbo",
+            model: "gpt-4o-mini",
             temperature: 0.2,
             streaming: true,
         });
@@ -91,7 +91,6 @@ export async function POST(req: Request) {
             stream.pipeThrough(createStreamDataTransformer())
         );
     } catch (e: any) {
-        console.log(e);
         return Response.json({ error: e.message }, { status: e.status ?? 500 });
     }
 }
