@@ -1,8 +1,8 @@
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 import {
-    PGVectorStore,
     DistanceStrategy,
+    PGVectorStore,
 } from "@langchain/community/vectorstores/pgvector";
 import { schema } from "./schema";
 import { OpenAIEmbeddings } from "@langchain/openai";
@@ -17,7 +17,7 @@ const embeddings = new OpenAIEmbeddings({
 
 const client = postgres(process.env.DATABASE_URL);
 
-const config = {
+export const config = {
     postgresConnectionOptions: {
         type: "postgres",
         host: process.env.POSTGRES_HOST,

@@ -5,6 +5,27 @@ import { Button } from "@/components/ui/button";
 import { useChat } from "ai/react";
 import { useRef, useEffect } from "react";
 
+const formatResponse = (text: string) => {
+    // Split the text by \n for new lines
+    return text.split("\n").map((line, index) => {
+        // Replace **text** with <strong>text</strong> for bold
+        const formattedLine = line.split(/(\*\*[^*]+\*\*)/).map((part, idx) => {
+            if (/^\*\*[^*]+\*\*$/.test(part)) {
+                // Remove ** and wrap with <strong>
+                return <strong key={idx}>{part.slice(2, -2)}</strong>;
+            }
+            return part;
+        });
+
+        return (
+            <p key={index}>
+                {formattedLine}
+                {index < text.length - 1 && <br />}
+            </p>
+        );
+    });
+};
+
 export function Chat() {
     const { messages, input, handleInputChange, handleSubmit } = useChat({
         api: "api/chat",
@@ -49,7 +70,7 @@ export function Chat() {
                                 >
                                     <div className="rounded-xl p-4 bg-background shadow-md flex w-3/4">
                                         <p className="text-primary">
-                                            {m.content}
+                                            {formatResponse(m.content)}
                                         </p>
                                     </div>
                                 </li>

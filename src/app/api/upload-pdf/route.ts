@@ -1,9 +1,16 @@
 import { NextResponse } from "next/server";
-import { createUniqueId, vectorStore } from "@/db";
-import type { Document } from "@langchain/core/documents";
-import pdf2json from "pdf2json";
+import { config } from "@/db";
+import { WebPDFLoader } from "@langchain/community/document_loaders/web/pdf";
+import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
+import { PGVectorStore } from "@langchain/community/vectorstores/pgvector";
+import { OpenAIEmbeddings } from "@langchain/openai";
 
 export const dynamic = "force-dynamic";
+
+const embeddings = new OpenAIEmbeddings({
+    openAIApiKey: process.env.OPENAI_API_KEY,
+    model: "text-embedding-3-small",
+});
 
 export async function POST(req: Request) {
     const formData = await req.formData();
@@ -23,44 +30,29 @@ export async function POST(req: Request) {
         // Convert the buffer to a Buffer instance for pdf2json
         const pdfBuffer = Buffer.from(buffer);
 
-        return new Promise((resolve) => {
-            const pdfParser = new pdf2json();
+        const blob = new Blob([pdfBuffer], { type: "application/pdf" });
 
-            pdfParser.on("pdfParser_dataError", (errData) => {
-                return resolve(
-                    NextResponse.json(
-                        { error: "Error reading PDF file", details: errData },
-                        { status: 500 }
-                    )
-                );
-            });
-
-            pdfParser.on("pdfParser_dataReady", async (pdfData) => {
-                // Extract text content from pdfData
-                const docs: Document[] = pdfData.Pages.map(
-                    (page, pageIndex) => {
-                        const pageText = page.Texts.map((textItem) =>
-                            decodeURIComponent(textItem.R[0].T)
-                        ).join(" ");
-                        return {
-                            pageContent: pageText,
-                            metadata: {
-                                page: pageIndex + 1,
-                                source: file.name,
-                            },
-                            id: createUniqueId(),
-                        };
-                    }
-                );
-
-                // Save content and embedding to the database
-                (await vectorStore).addDocuments(docs);
-                return resolve(NextResponse.json({ message: "success" }));
-            });
-
-            // Parse the PDF buffer
-            pdfParser.parseBuffer(pdfBuffer);
+        const loader = new WebPDFLoader(blob, {
+            parsedItemSeparator: "",
         });
+
+        const docs = await loader.load();
+
+        const textSplitter = new RecursiveCharacterTextSplitter({
+            chunkSize: 500,
+            chunkOverlap: 100,
+        });
+        
+        const splitDocs = await textSplitter.splitDocuments(docs);
+
+
+        await PGVectorStore.fromDocuments(splitDocs, embeddings, {
+            ...config,
+            collectionName: "test",
+            collectionTableName: "dataset_collections"
+        });
+
+        return NextResponse.json({ message: "success" });
     } catch (error) {
         console.error("Error processing PDF:", error);
         return NextResponse.json(
