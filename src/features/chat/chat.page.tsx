@@ -1,7 +1,5 @@
 "use client";
-
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { Input, Button } from "antd";
 import { useChat } from "ai/react";
 import { useRef, useEffect } from "react";
 
@@ -48,7 +46,7 @@ export function Chat() {
                 <h1 className="text-2xl font-bold">Chat Edan</h1>
             </header>
 
-            <section className="container px-0 pb-10 flex flex-col flex-grow gap-4 mx-auto max-w-3xl">
+            <section className="container px-0 pb-4 flex flex-col flex-grow gap-4 mx-auto max-w-3xl">
                 <ul
                     ref={chatParent}
                     className="h-1 p-4 flex-grow bg-muted/50 rounded-lg overflow-y-auto flex flex-col gap-4"
@@ -92,7 +90,13 @@ export function Chat() {
                         value={input}
                         onChange={handleInputChange}
                     />
-                    <Button className="ml-2" type="submit">
+                    <Button
+                        variant="solid"
+                        color="primary"
+                        size="large"
+                        className="ml-2"
+                        htmlType="submit"
+                    >
                         Submit
                     </Button>
                 </form>
