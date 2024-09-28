@@ -51,6 +51,13 @@ export function Chat() {
                     ref={chatParent}
                     className="h-1 p-4 flex-grow bg-muted/50 rounded-lg overflow-y-auto flex flex-col gap-4"
                 >
+                    <li className="flex flex-row-reverse">
+                        <div className="rounded-xl p-4 bg-background shadow-md flex max-w-3/4">
+                            <p className="text-primary">
+                                Hello there ! Can I help you ?
+                            </p>
+                        </div>
+                    </li>
                     {messages.map((m, index) => (
                         <div key={index}>
                             {m.role === "user" ? (
