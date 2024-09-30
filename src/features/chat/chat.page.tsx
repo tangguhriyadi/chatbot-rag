@@ -25,12 +25,13 @@ const formatResponse = (text: string) => {
 };
 
 export function Chat() {
-    const { messages, input, handleInputChange, handleSubmit } = useChat({
-        api: "api/chat",
-        onError: (e) => {
-            console.log(e);
-        },
-    });
+    const { messages, input, handleInputChange, handleSubmit, isLoading } =
+        useChat({
+            api: "api/chat",
+            onError: (e) => {
+                console.log(e);
+            },
+        });
     const chatParent = useRef<HTMLUListElement>(null);
 
     useEffect(() => {
@@ -43,7 +44,7 @@ export function Chat() {
     return (
         <main className="flex flex-col w-full h-screen max-h-dvh bg-background">
             <header className="p-4 border-b w-full max-w-3xl mx-auto">
-                <h1 className="text-2xl font-bold">Chat Edan</h1>
+                <h1 className="text-2xl font-bold">Chat Riyadi</h1>
             </header>
 
             <section className="container px-0 pb-4 flex flex-col flex-grow gap-4 mx-auto max-w-3xl">
@@ -82,6 +83,13 @@ export function Chat() {
                             )}
                         </div>
                     ))}
+                    {isLoading && (
+                        <li className="flex flex-row-reverse">
+                            <div className="rounded-xl p-4 bg-background shadow-md flex w-3/4">
+                                <p className="text-primary">Lagi mikir...</p>
+                            </div>
+                        </li>
+                    )}
                 </ul>
             </section>
 
