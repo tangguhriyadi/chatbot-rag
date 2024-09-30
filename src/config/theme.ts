@@ -1,3 +1,5 @@
+"use client";
+
 import type { ThemeConfig } from "antd";
 
 const theme: ThemeConfig = {

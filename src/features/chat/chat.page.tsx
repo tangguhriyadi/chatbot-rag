@@ -50,10 +50,10 @@ export function Chat() {
             <section className="container px-0 pb-4 flex flex-col flex-grow gap-4 mx-auto max-w-3xl">
                 <ul
                     ref={chatParent}
-                    className="h-1 p-4 flex-grow bg-muted/50 rounded-lg overflow-y-auto flex flex-col gap-4"
+                    className="h-1 p-4 flex-grow bg-zinc-50 rounded-lg overflow-y-auto flex flex-col gap-4"
                 >
                     <li className="flex flex-row-reverse">
-                        <div className="rounded-xl p-4 bg-background shadow-md flex max-w-3/4">
+                        <div className="rounded-xl p-4 shadow-md flex max-w-3/4">
                             <p className="text-primary">
                                 Hello there ! Can I help you ?
                             </p>
@@ -85,7 +85,7 @@ export function Chat() {
                     ))}
                     {isLoading && (
                         <li className="flex flex-row-reverse">
-                            <div className="rounded-xl p-4 bg-background shadow-md flex w-3/4">
+                            <div className="rounded-xl p-4 bg-background shadow-md flex max-w-3/4">
                                 <p className="text-primary">Lagi mikir...</p>
                             </div>
                         </li>

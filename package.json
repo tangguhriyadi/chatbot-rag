@@ -1,7 +1,6 @@
 {
     "name": "next-ai-prep",
     "version": "0.1.0",
-    "private": true,
     "scripts": {
         "dev": "next dev",
         "build": "next build",
@@ -14,7 +13,6 @@
         "@langchain/community": "^0.3.3",
         "@langchain/openai": "^0.0.28",
         "@langchain/textsplitters": "^0.1.0",
-        "@radix-ui/react-slot": "^1.0.2",
         "ai": "^3.0.23",
         "antd": "^5.21.1",
         "class-variance-authority": "^0.7.0",
@@ -24,8 +22,6 @@
         "next": "14.2.1",
         "openai": "^4.37.1",
         "pdf-parse": "^1.1.1",
-        "pdfjs-dist": "2.10.377",
-        "pdfreader": "^3.0.5",
         "pg": "^8.13.0",
         "postgres": "^3.4.4",
         "react": "^18",
@@ -37,7 +33,6 @@
     "devDependencies": {
         "@types/node": "^20",
         "@types/pdf-parse": "^1.1.4",
-        "@types/pdfjs-dist": "^2.10.378",
         "@types/pg": "^8.11.10",
         "@types/react": "^18",
         "@types/react-dom": "^18",
