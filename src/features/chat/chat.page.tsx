@@ -42,7 +42,7 @@ export function Chat() {
     });
 
     return (
-        <main className="flex flex-col w-full h-screen max-h-dvh bg-background">
+        <div className="flex flex-col w-full h-screen max-h-dvh">
             <header className="p-4 border-b w-full max-w-3xl mx-auto">
                 <h1 className="text-2xl font-bold">Chat Riyadi</h1>
             </header>
@@ -53,7 +53,7 @@ export function Chat() {
                     className="h-1 p-4 flex-grow bg-zinc-50 rounded-lg overflow-y-auto flex flex-col gap-4"
                 >
                     <li className="flex flex-row-reverse">
-                        <div className="rounded-xl p-4 shadow-md flex max-w-3/4">
+                        <div className="rounded-xl p-4 shadow-md flex max-w-3/4 bg-zinc-100">
                             <p className="text-primary">
                                 Hello there ! Can I help you ?
                             </p>
@@ -63,7 +63,7 @@ export function Chat() {
                         <div key={index}>
                             {m.role === "user" ? (
                                 <li key={m.id} className="flex flex-row">
-                                    <div className="rounded-xl p-4 bg-background shadow-md flex">
+                                    <div className="rounded-xl p-4 shadow-md flex">
                                         <p className="text-primary">
                                             {m.content}
                                         </p>
@@ -74,8 +74,8 @@ export function Chat() {
                                     key={m.id}
                                     className="flex flex-row-reverse"
                                 >
-                                    <div className="rounded-xl p-4 bg-background shadow-md flex w-3/4">
-                                        <p className="text-primary">
+                                    <div className="rounded-xl p-4 shadow-md flex w-3/4">
+                                        <p className="text-primar">
                                             {formatResponse(m.content)}
                                         </p>
                                     </div>
@@ -85,7 +85,7 @@ export function Chat() {
                     ))}
                     {isLoading && (
                         <li className="flex flex-row-reverse">
-                            <div className="rounded-xl p-4 bg-background shadow-md flex max-w-3/4">
+                            <div className="rounded-xl p-4 shadow-md flex max-w-3/4">
                                 <p className="text-primary">Lagi mikir...</p>
                             </div>
                         </li>
@@ -116,6 +116,6 @@ export function Chat() {
                     </Button>
                 </form>
             </section>
-        </main>
+        </div>
     );
 }

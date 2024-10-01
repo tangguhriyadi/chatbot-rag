@@ -1,13 +1,6 @@
 import { ConfigProvider } from "antd";
 import theme from "@/config/theme";
-import dynamic from "next/dynamic";
-
-const Chat = dynamic(
-    () => import("@/features/chat/chat.page").then((mod) => mod.Chat),
-    {
-        ssr: false,
-    }
-);
+import { Chat } from "@/features/chat/chat.page";
 
 export default function Page() {
     return (
