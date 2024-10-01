@@ -15,6 +15,7 @@ const embeddings = new OpenAIEmbeddings({
 export async function POST(req: Request) {
     const formData = await req.formData();
     const file = formData.get("file") as File;
+    const collectionName = formData.get("name") as string;
 
     if (!file) {
         return NextResponse.json(
@@ -42,14 +43,18 @@ export async function POST(req: Request) {
             chunkSize: 500,
             chunkOverlap: 100,
         });
-        
-        const splitDocs = await textSplitter.splitDocuments(docs);
 
+        const splitDocs = await textSplitter.splitDocuments(docs);
 
         await PGVectorStore.fromDocuments(splitDocs, embeddings, {
             ...config,
-            collectionName: "test",
-            collectionTableName: "dataset_collections"
+            collectionName: collectionName,
+            collectionTableName: "dataset_collections",
+            collectionMetadata: {
+                name: file.name,
+                size: file.size,
+                type: file.type,
+            },
         });
 
         return NextResponse.json({ message: "success" });

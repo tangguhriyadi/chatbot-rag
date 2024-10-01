@@ -2,15 +2,15 @@
 
 import React, { useState } from "react";
 import { Menu, Layout, Button } from "antd";
-import { User, Upload } from "lucide-react";
 import { MenuIcon } from "lucide-react";
-import { MenuConfig } from "../../config/menu";
-import { useRouter } from "next/navigation";
-import { cn } from "../../lib/utils";
+import { MenuConfig } from "@/config/menu";
+import { usePathname, useRouter } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 const Sidebar: React.FC = () => {
     const [collapsed, setCollapsed] = useState(false);
     const router = useRouter();
+    const pathname = usePathname();
 
     return (
         <div className="h-screen">
@@ -42,7 +42,7 @@ const Sidebar: React.FC = () => {
                 <Menu
                     theme="dark"
                     mode="inline"
-                    defaultSelectedKeys={["/"]}
+                    defaultSelectedKeys={[pathname]}
                     items={MenuConfig}
                     onClick={({ key }) => {
                         router.push(key.toString());

@@ -19,21 +19,23 @@ export default function UploadPage() {
     const handleUpload = useCallback(async () => {
         if (!file) return;
 
-        const formData = new FormData();
-        formData.append("file", file);
+        console.log(file)
 
-        try {
-            const res = await fetch("api/upload-pdf", {
-                method: "POST",
-                body: formData,
-            });
+        // const formData = new FormData();
+        // formData.append("file", file);
 
-            const data = await res.json();
-            setMessage(data.message || "File uploaded successfully");
-        } catch (error) {
-            setMessage("Error uploading file");
-            console.error(error);
-        }
+        // try {
+        //     const res = await fetch("api/upload-pdf", {
+        //         method: "POST",
+        //         body: formData,
+        //     });
+
+        //     const data = await res.json();
+        //     setMessage(data.message || "File uploaded successfully");
+        // } catch (error) {
+        //     setMessage("Error uploading file");
+        //     console.error(error);
+        // }
     }, [file]);
 
     return (
