@@ -26,7 +26,7 @@ export const config = {
         password: process.env.POSTGRES_PASSWORD,
         database: process.env.POSTGRES_DB,
     } as PoolConfig,
-    tableName: "datasets",
+    tableName: "collection_dataset",
     columns: {
         idColumnName: "id",
         vectorColumnName: "vector",

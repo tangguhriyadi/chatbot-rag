@@ -1,7 +1,7 @@
 "use client";
 
 import { Layout } from "antd";
-import Sidebar from "./Sidebar";
+import Sidebar from "./sidebar";
 
 interface MainLayoutProps {
     children: React.ReactNode;

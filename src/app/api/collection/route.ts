@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { config } from "@/db";
+import { db, config } from "@/db";
+import { sql } from "drizzle-orm";
 import { WebPDFLoader } from "@langchain/community/document_loaders/web/pdf";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { PGVectorStore } from "@langchain/community/vectorstores/pgvector";
@@ -7,11 +8,25 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 
 export const dynamic = "force-dynamic";
 
+// API GET
+export async function GET() {
+    try {
+        const query = sql`SELECT * FROM collection`;
+        const collections = await db.execute(query);
+
+        return NextResponse.json({ message: "success", data: collections });
+    } catch (e) {
+        console.log(e);
+        return NextResponse.json({ message: "error" }, { status: 500 });
+    }
+}
+
 const embeddings = new OpenAIEmbeddings({
     openAIApiKey: process.env.OPENAI_API_KEY,
     model: "text-embedding-3-small",
 });
 
+// API POST
 export async function POST(req: Request) {
     const formData = await req.formData();
     const file = formData.get("file") as File;
@@ -49,7 +64,7 @@ export async function POST(req: Request) {
         await PGVectorStore.fromDocuments(splitDocs, embeddings, {
             ...config,
             collectionName: collectionName,
-            collectionTableName: "dataset_collections",
+            collectionTableName: "collection",
             collectionMetadata: {
                 name: file.name,
                 size: file.size,

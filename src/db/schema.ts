@@ -1,7 +1,7 @@
 import { pgTable, uniqueIndex, varchar } from "drizzle-orm/pg-core";
 
 export const userTable = pgTable(
-    "users",
+    "user",
     {
         id: varchar("id", { length: 256 }).primaryKey(),
         name: varchar("name", { length: 256 }),

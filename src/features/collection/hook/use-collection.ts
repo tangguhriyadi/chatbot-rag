@@ -3,7 +3,7 @@ import { BaseResponse } from "@/types/response";
 import { Collection } from "@/features/collection/schema/collection.schema";
 
 const getCollections = async () => {
-    const res = await fetch("/api/collections");
+    const res = await fetch("/api/collection");
     return await res.json();
 };
 
