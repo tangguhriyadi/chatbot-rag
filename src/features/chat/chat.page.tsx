@@ -44,7 +44,7 @@ export function Chat() {
     return (
         <div className="flex flex-col w-full h-screen max-h-dvh">
             <header className="p-4 border-b w-full max-w-3xl mx-auto">
-                <h1 className="text-2xl font-bold">Chat Riyadi</h1>
+                <h1 className="text-2xl font-bold">Chat RKD</h1>
             </header>
 
             <section className="container px-0 pb-4 flex flex-col flex-grow gap-4 mx-auto max-w-3xl">

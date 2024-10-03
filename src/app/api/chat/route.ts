@@ -19,7 +19,7 @@ const formatMessage = (message: VercelChatMessage) => {
     return `${message.role}: ${message.content}`;
 };
 
-const TEMPLATE = `You are a helpful assistant named Riyadi, and must answer all questions.
+const TEMPLATE = `You are a helpful assistant named Reka, and must answer all questions.
 
 Answer the question based on the following context and chat history, if you dont't find the answer in the context, please answer anything you know by saying "**external resource**: " at the first line, otherwise dont say that, then continue with your answer:
 <context>
@@ -91,6 +91,7 @@ export async function POST(req: Request) {
             stream.pipeThrough(createStreamDataTransformer())
         );
     } catch (e: any) {
+        console.log(e)
         return Response.json({ error: e.message }, { status: e.status ?? 500 });
     }
 }
