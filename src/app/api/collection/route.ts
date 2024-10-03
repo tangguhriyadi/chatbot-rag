@@ -7,6 +7,7 @@ import { PGVectorStore } from "@langchain/community/vectorstores/pgvector";
 import { OpenAIEmbeddings } from "@langchain/openai";
 
 export const dynamic = "force-dynamic";
+export const revalidate = 60
 
 // API GET
 export async function GET() {
