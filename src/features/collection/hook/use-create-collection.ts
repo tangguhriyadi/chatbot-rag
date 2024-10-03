@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateCollection } from "@/features/collection/schema/create-collection.schema";
+import { QUERY_KEYS } from "@/static/query-keys";
 
 const createCollection = async (body: CreateCollection) => {
     const formData = new FormData();
@@ -17,9 +18,9 @@ export const useCreateCollection = (onSuccess?: () => void) => {
     const queryClient = useQueryClient();
     return useMutation({
         mutationFn: createCollection,
-        mutationKey: ["create-collection"],
+        mutationKey: QUERY_KEYS.COLLECTION.CREATE,
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ["collections"] });
+            queryClient.invalidateQueries({ queryKey: QUERY_KEYS.COLLECTION.ALL });
             if (onSuccess) {
                 onSuccess();
             }
