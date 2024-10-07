@@ -1,11 +1,20 @@
 {
   "root": true,
   "extends": "next/core-web-vitals",
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
   "ignorePatterns": [
     "node_modules/",
     "dist/",
     ".prettierrc",
-    ".prettierignore"
+    ".prettierignore",
+    ".next/"
   ],
   "rules": {
     "semi": ["error"],
@@ -15,7 +24,13 @@
     "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-console": "warn",
     "@typescript-eslint/quotes": "warn",
-    "react-hooks/exhaustive-deps": ["off"]
+    "react-hooks/exhaustive-deps": ["off"],
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ]
   },
-  "plugins": ["@typescript-eslint"]
+  "plugins": ["react", "@typescript-eslint", "prettier"]
 }
