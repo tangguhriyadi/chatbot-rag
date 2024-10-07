@@ -1,14 +1,6 @@
 {
   "root": true,
   "extends": "next/core-web-vitals",
-  "parserOptions": {
-    "project": "./tsconfig.json",
-    "ecmaFeatures": {
-      "jsx": true
-    },
-    "ecmaVersion": "latest",
-    "sourceType": "module"
-  },
   "ignorePatterns": [
     "node_modules/",
     "dist/",
@@ -22,8 +14,6 @@
     "no-console": ["error"],
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/quotes": ["error", "double"],
-    "@typescript-eslint/no-console": "warn",
     "react-hooks/exhaustive-deps": ["off"]
   },
   "plugins": ["@typescript-eslint"]
