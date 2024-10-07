@@ -22,8 +22,6 @@
     "no-console": ["error"],
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/no-console": "warn",
-    "@typescript-eslint/quotes": "warn",
     "react-hooks/exhaustive-deps": ["off"],
     "prettier/prettier": [
       "error",
@@ -32,5 +30,5 @@
       }
     ]
   },
-  "plugins": ["react", "@typescript-eslint", "prettier"]
+  "plugins": ["@typescript-eslint"]
 }
