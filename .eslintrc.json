@@ -22,6 +22,8 @@
     "no-console": ["error"],
     "@typescript-eslint/no-unused-vars": "error",
     "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/quotes": ["error", "double"],
+    "@typescript-eslint/no-console": "warn",
     "react-hooks/exhaustive-deps": ["off"]
   },
   "plugins": ["@typescript-eslint"]

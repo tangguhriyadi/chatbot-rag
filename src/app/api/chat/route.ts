@@ -1,7 +1,7 @@
 import {
-    Message as VercelChatMessage,
-    StreamingTextResponse,
-    createStreamDataTransformer,
+  Message as VercelChatMessage,
+  StreamingTextResponse,
+  createStreamDataTransformer,
 } from "ai";
 import { ChatOpenAI } from "@langchain/openai";
 import { PromptTemplate } from "@langchain/core/prompts";
@@ -16,7 +16,7 @@ export const dynamic = "force-dynamic";
  * message history directly into the model.
  */
 const formatMessage = (message: VercelChatMessage) => {
-    return `${message.role}: ${message.content}`;
+  return `${message.role}: ${message.content}`;
 };
 
 const TEMPLATE = `You are a helpful assistant named Reka, and must answer all questions.
@@ -34,64 +34,62 @@ Question: {question}
 `;
 
 export async function POST(req: Request) {
-    try {
-        // Extract the `messages` from the body of the request
-        const { messages } = await req.json();
+  try {
+    // Extract the `messages` from the body of the request
+    const { messages } = await req.json();
 
-        const formattedPreviousMessages = messages
-            .slice(0, -1)
-            .map(formatMessage);
+    const formattedPreviousMessages = messages.slice(0, -1).map(formatMessage);
 
-        const currentMessageContent = messages[messages.length - 1].content;
+    const currentMessageContent = messages[messages.length - 1].content;
 
-        const promptTemplate = PromptTemplate.fromTemplate(TEMPLATE);
+    const promptTemplate = PromptTemplate.fromTemplate(TEMPLATE);
 
-        const model = new ChatOpenAI({
-            apiKey: process.env.OPENAI_API_KEY!,
-            model: "gpt-4o-mini",
-            temperature: 0.2,
-            streaming: true,
-        });
+    const model = new ChatOpenAI({
+      apiKey: process.env.OPENAI_API_KEY!,
+      model: "gpt-4o-mini",
+      temperature: 0.2,
+      streaming: true,
+    });
 
-        const store = await vectorStore;
+    const store = await vectorStore;
 
-        const retriever = store.asRetriever({
-            k: 3,
-            searchType: "similarity",
-        });
+    const retriever = store.asRetriever({
+      k: 3,
+      searchType: "similarity",
+    });
 
-        /**
-         * Chat models stream message chunks rather than bytes, so this
-         * output parser handles serialization and encoding.
-         */
-        const parser = new HttpResponseOutputParser();
+    /**
+     * Chat models stream message chunks rather than bytes, so this
+     * output parser handles serialization and encoding.
+     */
+    const parser = new HttpResponseOutputParser();
 
-        const chain = RunnableSequence.from([
-            {
-                question: (input) => input.question,
-                chat_history: (input) => input.chat_history,
-                context: async (input: any) => {
-                    const docs = await retriever.invoke(input.question);
-                    return formatDocumentsAsString(docs);
-                },
-            },
-            promptTemplate,
-            model,
-            parser,
-        ]);
+    const chain = RunnableSequence.from([
+      {
+        question: (input) => input.question,
+        chat_history: (input) => input.chat_history,
+        context: async (input: any) => {
+          const docs = await retriever.invoke(input.question);
+          return formatDocumentsAsString(docs);
+        },
+      },
+      promptTemplate,
+      model,
+      parser,
+    ]);
 
-        // Convert the response into a friendly text-stream
-        const stream = await chain.stream({
-            chat_history: formattedPreviousMessages.join("\n"),
-            question: currentMessageContent,
-        });
+    // Convert the response into a friendly text-stream
+    const stream = await chain.stream({
+      chat_history: formattedPreviousMessages.join("\n"),
+      question: currentMessageContent,
+    });
 
-        // Respond with the stream
-        return new StreamingTextResponse(
-            stream.pipeThrough(createStreamDataTransformer())
-        );
-    } catch (e: any) {
-        console.log(e)
-        return Response.json({ error: e.message }, { status: e.status ?? 500 });
-    }
+    // Respond with the stream
+    return new StreamingTextResponse(
+      stream.pipeThrough(createStreamDataTransformer()),
+    );
+  } catch (e: any) {
+    console.log(e);
+    return Response.json({ error: e.message }, { status: e.status ?? 500 });
+  }
 }
