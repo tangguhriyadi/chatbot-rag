@@ -3,9 +3,9 @@
 import React, { useState } from "react";
 import { Menu, Layout, Button } from "antd";
 import { MenuIcon } from "lucide-react";
-import { MenuConfig } from "@/config/menu";
 import { usePathname, useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
+import { cn } from "../../lib/utils";
+import { MenuConfig } from "../../config/menu";
 
 const Sidebar: React.FC = () => {
     const [collapsed, setCollapsed] = useState(false);

@@ -1,15 +1,15 @@
 import { useQuery } from "@tanstack/react-query";
-import { BaseResponse } from "@/types/response";
-import { Collection } from "@/features/collection/schema/collection.schema";
+import { Collection } from "../schema/collection.schema";
+import { BaseResponse } from "../../../types/response";
 
 const getCollections = async () => {
-    const res = await fetch("/api/collection");
-    return await res.json();
+  const res = await fetch("/api/collection");
+  return await res.json();
 };
 
 export const useCollection = () => {
-    return useQuery<BaseResponse<Collection[]>>({
-        queryKey: ["collections"],
-        queryFn: () => getCollections(),
-    });
+  return useQuery<BaseResponse<Collection[]>>({
+    queryKey: ["collections"],
+    queryFn: () => getCollections(),
+  });
 };

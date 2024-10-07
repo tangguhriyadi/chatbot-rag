@@ -1,10 +1,10 @@
 import { NextResponse } from "next/server";
-import { db, config } from "@/db";
 import { sql } from "drizzle-orm";
 import { WebPDFLoader } from "@langchain/community/document_loaders/web/pdf";
 import { RecursiveCharacterTextSplitter } from "@langchain/textsplitters";
 import { PGVectorStore } from "@langchain/community/vectorstores/pgvector";
 import { OpenAIEmbeddings } from "@langchain/openai";
+import { config, db } from "../../../db";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 60

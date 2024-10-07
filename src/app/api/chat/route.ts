@@ -7,8 +7,8 @@ import { ChatOpenAI } from "@langchain/openai";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { HttpResponseOutputParser } from "langchain/output_parsers";
 import { RunnableSequence } from "@langchain/core/runnables";
-import { vectorStore } from "@/db";
 import { formatDocumentsAsString } from "langchain/util/document";
+import { vectorStore } from "../../../db";
 export const dynamic = "force-dynamic";
 
 /**
