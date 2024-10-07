@@ -7,78 +7,75 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 import { config, db } from "../../../db";
 
 export const dynamic = "force-dynamic";
-export const revalidate = 60
+export const revalidate = 60;
 
 // API GET
 export async function GET() {
-    try {
-        const query = sql`SELECT * FROM collection`;
-        const collections = await db.execute(query);
+  try {
+    const query = sql`SELECT * FROM collection`;
+    const collections = await db.execute(query);
 
-        return NextResponse.json({ message: "success", data: collections });
-    } catch (e) {
-        console.log(e);
-        return NextResponse.json({ message: "error" }, { status: 500 });
-    }
+    return NextResponse.json({ message: "success", data: collections });
+  } catch (e) {
+    console.log(e);
+    return NextResponse.json({ message: "error" }, { status: 500 });
+  }
 }
 
 const embeddings = new OpenAIEmbeddings({
-    openAIApiKey: process.env.OPENAI_API_KEY,
-    model: "text-embedding-3-small",
+  openAIApiKey: process.env.OPENAI_API_KEY,
+  model: "text-embedding-3-small",
 });
 
 // API POST
 export async function POST(req: Request) {
-    const formData = await req.formData();
-    const file = formData.get("file") as File;
-    const collectionName = formData.get("name") as string;
+  const formData = await req.formData();
+  const file = formData.get("file") as File;
+  const collectionName = formData.get("name") as string;
 
-    if (!file) {
-        return NextResponse.json(
-            { message: "No file uploaded" },
-            { status: 400 }
-        );
-    }
+  if (!file) {
+    return NextResponse.json({ message: "No file uploaded" }, { status: 400 });
+  }
 
-    try {
-        // Read the file buffer
-        const buffer = await file.arrayBuffer();
+  try {
+    // Read the file buffer
+    const buffer = await file.arrayBuffer();
 
-        // Convert the buffer to a Buffer instance for pdf2json
-        const pdfBuffer = Buffer.from(buffer);
+    // Convert the buffer to a Buffer instance for pdf2json
+    const pdfBuffer = Buffer.from(buffer);
 
-        const blob = new Blob([pdfBuffer], { type: "application/pdf" });
+    const blob = new Blob([pdfBuffer], { type: "application/pdf" });
 
-        const loader = new WebPDFLoader(blob, {
-            parsedItemSeparator: "",
-        });
+    const loader = new WebPDFLoader(blob, {
+      parsedItemSeparator: "",
+    });
 
-        const docs = await loader.load();
+    const docs = await loader.load();
 
-        const textSplitter = new RecursiveCharacterTextSplitter({
-            chunkSize: 500,
-            chunkOverlap: 100,
-        });
+    const textSplitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 500,
+      chunkOverlap: 100,
+    });
 
-        const splitDocs = await textSplitter.splitDocuments(docs);
+    const splitDocs = await textSplitter.splitDocuments(docs);
 
-        await PGVectorStore.fromDocuments(splitDocs, embeddings, {
-            ...config,
-            collectionName: collectionName,
-            collectionTableName: "collection",
-            collectionMetadata: {
-                name: file.name,
-                size: file.size,
-                type: file.type,
-            },
-        });
+    await PGVectorStore.fromDocuments(splitDocs, embeddings, {
+      ...config,
+      collectionName: collectionName,
+      collectionTableName: "collection",
+      collectionMetadata: {
+        name: file.name,
+        size: file.size,
+        type: file.type,
+      },
+    });
 
-        return NextResponse.json({ message: "success" });
-    } catch (error) {
-        console.error("Error processing PDF:", error);
-        return NextResponse.json(
-            { message: "Error processing PDF" },
-            { status: 500 }
-        );
-    }
+    return NextResponse.json({ message: "success" });
+  } catch (error) {
+    console.error("Error processing PDF:", error);
+    return NextResponse.json(
+      { message: "Error processing PDF" },
+      { status: 500 },
+    );
+  }
 }
