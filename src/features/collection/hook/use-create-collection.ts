@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateCollection } from "../schema/create-collection.schema";
-import { QUERY_KEYS } from "../../../static/query-keys";
+import { QUERY_KEYS } from "../../../constant/query-keys";
 
 const createCollection = async (body: CreateCollection) => {
   const formData = new FormData();

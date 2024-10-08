@@ -1,6 +1,6 @@
 import { ItemType, MenuItemType } from "antd/es/menu/interface";
 import { MessageCircle, Database } from "lucide-react";
-import { ROUTES } from "../static/routes";
+import { ROUTES } from "../constant/routes";
 
 export const MenuConfig: ItemType<MenuItemType>[] = [
     {
