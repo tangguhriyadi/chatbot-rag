@@ -29,6 +29,7 @@ export function Chat() {
         useChat({
             api: "api/chat",
             onError: (e) => {
+                // eslint-disable-next-line no-console
                 console.log(e);
             },
         });

@@ -17,7 +17,6 @@ export async function GET() {
 
     return NextResponse.json({ message: "success", data: collections });
   } catch (e) {
-    console.log(e);
     return NextResponse.json({ message: "error" }, { status: 500 });
   }
 }
@@ -72,7 +71,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ message: "success" });
   } catch (error) {
-    console.error("Error processing PDF:", error);
     return NextResponse.json(
       { message: "Error processing PDF" },
       { status: 500 },
